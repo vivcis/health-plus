@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/decadev/squad10/healthplus/models"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var DataBase *sql.DB
