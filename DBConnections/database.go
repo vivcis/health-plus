@@ -9,7 +9,7 @@ import (
 var DataBase *sql.DB
 
 func OpenDB() {
-	db, err := sql.Open("mysql", "root:flyn!GG@01@tcp(127.0.0.1:3306)/")
+	db, err := sql.Open("mysql", "root:flyn!GG@01@tcp(127.0.0.1:3306)/hospital")
 	if err != nil {
 		fmt.Println(err)
 		return
