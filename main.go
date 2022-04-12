@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	dsn := "root:appliCATION123@#@tcp(127.0.0.1:3306)/hospital?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:houseno6@tcp(127.0.0.1:3306)/hospital?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Printf("Error %s when opening DB\n", err)
@@ -34,7 +34,7 @@ func main() {
 
 	handlers.Register(router)
 
-	e := http.ListenAndServe(":8080", router)
+	e := http.ListenAndServe(":8084", router)
 	if e != nil {
 		fmt.Println(e)
 		return

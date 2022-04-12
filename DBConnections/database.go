@@ -10,13 +10,23 @@ import (
 var DataBase *sql.DB
 
 func OpenDB() {
-	db, err := sql.Open("mysql", "root:appliCATION123@#@tcp(127.0.0.1:3306)/hospital")
+	db, err := sql.Open("mysql", "root:houseno6@tcp(127.0.0.1:3306)/hospital")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	DataBase = db
+}
+
+//Register and send patient details to DB
+func InsertPatientDetails(p models.Patient) {
+	insert, err := DataBase.Query("INSERT INTO patients (ID, NAME, AGE, EMAIL, PASSWORD) VALUES (?,?,?,?,?)", p.ID, p.Name, p.Age, p.Email, p.Password)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(insert)
 }
 
 func ScanDoctors() []models.Doctor {
