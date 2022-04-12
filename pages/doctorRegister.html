@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Health Plus</title>
+</head>
+<body>
+    <h2>Account registration</h2>
+    <ul>
+        <li>username must contain only letters or numbers</li>
+        <li>username must be longer than 4 characters but shorter than 51</li>
+        <li>password must contain an uppercase letter, lowercase letter, number, and special characters</li>
+        <li>password must be greater than 11 characters but less than 60</li>
+    </ul>
+  <form action="/registerauth" method="POST">
+    <h1>WELCOME Dr. {{ .Name}}</h1>
+    <h2>Sign Up</h2><br>
+    <label for="username">Name:</label><br>
+    <input type="text" name="username" id="username"><br>
+
+    <label for="age">Age:</label><br>
+    <input type="text" name="age" id="age"><br>
+
+    <label for="email">Email:</label><br>
+    <input type="text" name="email" id="email"><br>
+
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br><br>
+    
+    <input type="submit" value="Submit">
+  </form>
+
+  <br><br>
+    {{if .}}
+      {{ .}}
+    {{end}}
+
+</body>
+</html>

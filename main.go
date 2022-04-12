@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"github.com/decadev/squad10/healthplus/DBConnections"
 	"github.com/decadev/squad10/healthplus/handlers"
 	"github.com/decadev/squad10/healthplus/models"
@@ -12,10 +13,10 @@ import (
 )
 
 func main() {
-	dsn := "root:flyn!GG@01@tcp(127.0.0.1:3306)/hospital?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:appliCATION123@#@tcp(127.0.0.1:3306)/hospital?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		fmt.Println(err)
+		log.Printf("Error %s when opening DB\n", err)
 		return
 	}
 
@@ -38,5 +39,8 @@ func main() {
 		fmt.Println(e)
 		return
 	}
+
+	fs := http.FileServer(http.Dir("./static/"))
+    router.Handle("/static/*", http.StripPrefix("/static/", fs))
 
 }
