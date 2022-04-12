@@ -58,7 +58,7 @@ func PostRegisterPatientHandler(w http.ResponseWriter, r *http.Request) {
 	p.Username = username
 	p.Password = password
 
-	_, err := db.FindUserByEmail(p.Email)
+	_, err := db.FindUserByEmail(p.Email, p.Username)
 	if err == nil {
 		// this user already exists
 		// return a message to the user
@@ -68,7 +68,7 @@ func PostRegisterPatientHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(e)
 			return
 		}
-		e = t.Execute(w, "email already exist")
+		e = t.Execute(w, "User already exists. Check Email or Username")
 		if e != nil {
 			fmt.Println(e)
 			return
@@ -76,23 +76,23 @@ func PostRegisterPatientHandler(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	_, err = db.FindUserByUsername(p.Username)
-	if err == nil {
-		// this username already exists
-		// return a message to the user
-
-		t, e := template.ParseFiles("pages/registerPatient.html")
-		if e != nil {
-			fmt.Println(e)
-			return
-		}
-		e = t.Execute(w, "username already in use")
-		if e != nil {
-			fmt.Println(e)
-			return
-		}
-
-	}
+	//_, err = db.FindUserByUsername(p.Username)
+	//if err == nil {
+	//	// this username already exists
+	//	// return a message to the user
+	//
+	//	t, e := template.ParseFiles("pages/registerPatient.html")
+	//	if e != nil {
+	//		fmt.Println(e)
+	//		return
+	//	}
+	//	e = t.Execute(w, "username already in use")
+	//	if e != nil {
+	//		fmt.Println(e)
+	//		return
+	//	}
+	//
+	//}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(p.Password), bcrypt.DefaultCost)
 	if err != nil {

@@ -27,25 +27,28 @@ func SetupDB() {
 	DB = db
 }
 
-func FindUserByEmail(email string) (*models.Patient, error) {
+func FindUserByEmail(email string, username string) (*models.Patient, error) {
 	user := &models.Patient{}
 	// SELECT * from patient table where email = ?
 	err := DB.Where("email = ?", email).First(user).Error
 	if err != nil {
-		return nil, err
+		err = DB.Where("username = ?", username).First(user).Error
+		if err != nil {
+			return nil, err
+		}
 	}
 	return user, nil
 }
 
-func FindUserByUsername(username string) (*models.Patient, error) {
-	user := &models.Patient{}
-	// SELECT * from patient table where email = ?
-	err := DB.Where("username = ?", username).First(user).Error
-	if err != nil {
-		return nil, err
-	}
-	return user, nil
-}
+//func FindUserByUsername(username string) (*models.Patient, error) {
+//	user := &models.Patient{}
+//	// SELECT * from patient table where email = ?
+//	err := DB.Where("username = ?", username).First(user).Error
+//	if err != nil {
+//		return nil, err
+//	}
+//	return user, nil
+//}
 
 func CreatePatientInTable(user models.Patient) {
 	if err := DB.Create(user).Error; err != nil {
