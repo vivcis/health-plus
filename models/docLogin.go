@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -18,7 +19,7 @@ var db *sql.DB
 func main() {
 	tpl, _ = template.ParseGlob("pages/*.html")
 	var err error
-	db, err = sql.Open("mysql", "root:@tcp(localhost:3306)/healthPlus_DB")
+	db, err = sql.Open("mysql", "appliCATION123@#@tcp(localhost:3306)/healthPlus_DB")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -88,42 +89,46 @@ func registerAuthHandler(w http.ResponseWriter, r *http.Request){
 	fmt.Println("*********registerAuthHandler running*********")
 	r.ParseForm()
 	username := r.FormValue("username")
+
 	//check username for only alphanumeric characters
-	var nameAlphanumeric bool
+	//var nameAlphanumeric  = true
 	for _, char := range username {
 		//func isLetter(r rune) bool, func isNumber(r rune) bool
 		//if !unicode.IsLetter(char) && !unicode.IsNumber(char) {
 		if unicode.IsLetter(char) == false && unicode.IsNumber(char) == false {
-			
-			nameAlphanumeric = false
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusNotAcceptable)
+			json.NewEncoder(w).Encode(map[string]string{"error": "username must be alphanumeric"})
+			return
+			//nameAlphanumeric = false
 		}
 	}
 	//check username passwordlength
-	var nameLength bool
+	//var nameLength bool
 	if 5 <= len(username) && len(username) <= 50 {
-		nameLength = true
+		//nameLength = true
 	}
 
 	age := r.FormValue("age")
 	//check age for only numbers
-	var ageNumeric bool
+	//var ageNumeric bool
 	for _, char := range age {
 		if unicode.IsNumber(char) == false {
-			ageNumeric = false
+			//ageNumeric = false
 		}
 	}
 	//check age length
-	var ageLength bool
+	//var ageLength bool
 	if 1 <= len(age) && len(age) <= 3 {
-		ageLength = true
+		//ageLength = true
 	}
 
 	email := r.FormValue("email")
 	//check email for only alphanumeric characters
-	var emailAlphanumeric bool
+	//var emailAlphanumeric bool
 	for _, char := range email {
 		if unicode.IsLetter(char) == false && unicode.IsNumber(char) == false {
-			emailAlphanumeric = false
+			//emailAlphanumeric = false
 		}
 	}
 	
