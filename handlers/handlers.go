@@ -41,7 +41,7 @@ func RegisterPatientHandler(w http.ResponseWriter, r *http.Request) {
 
 //PostRegisterPatientHandler successfully register's patient's name in the db if valid
 func PostRegisterPatientHandler(w http.ResponseWriter, r *http.Request) {
-	var p models.Patient
+	var user models.Patient
 	r.ParseForm()
 	name := r.FormValue("name")
 	ageString := r.FormValue("ageString")
@@ -51,14 +51,14 @@ func PostRegisterPatientHandler(w http.ResponseWriter, r *http.Request) {
 
 	age, _ := strconv.Atoi(ageString)
 
-	p.ID = uuid.NewString()
-	p.Name = name
-	p.Age = uint(age)
-	p.Email = email
-	p.Username = username
-	p.Password = password
+	user.ID = uuid.NewString()
+	user.Name = name
+	user.Age = uint(age)
+	user.Email = email
+	user.Username = username
+	user.Password = password
 
-	_, err := db.FindUserByEmail(p.Email, p.Username)
+	_, err := db.FindUserByEmailandUserName(user.Email, user.Username)
 	if err == nil {
 		// this user already exists
 		// return a message to the user
@@ -76,32 +76,14 @@ func PostRegisterPatientHandler(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	//_, err = db.FindUserByUsername(p.Username)
-	//if err == nil {
-	//	// this username already exists
-	//	// return a message to the user
-	//
-	//	t, e := template.ParseFiles("pages/registerPatient.html")
-	//	if e != nil {
-	//		fmt.Println(e)
-	//		return
-	//	}
-	//	e = t.Execute(w, "username already in use")
-	//	if e != nil {
-	//		fmt.Println(e)
-	//		return
-	//	}
-	//
-	//}
-
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(p.Password), bcrypt.DefaultCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	p.PasswordHash = string(hashedPassword)
+	user.PasswordHash = string(hashedPassword)
 
-	db.CreatePatientInTable(p)
+	db.CreatePatientInTable(user)
 
 	http.Redirect(w, r, "/patientLogin", http.StatusFound)
 
