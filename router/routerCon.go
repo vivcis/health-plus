@@ -16,6 +16,10 @@ func SetupRouter() {
 	router.Post("/registerPatient", handlers.PostRegisterPatientHandler)
 	router.Get("/patientLogin", handlers.PatientLoginHandler)
 
+	router.Get("/registerDoctor", handlers.RegisterDoctorHandler)
+	router.Post("/registerDoctor", handlers.PostRegisterDoctorHandler)
+	router.Get("/doctorLogin", handlers.DoctorLoginHandler)
+
 	e := http.ListenAndServe(":8084", router)
 	if e != nil {
 		fmt.Println(e)
