@@ -29,7 +29,7 @@ func SetupDB() {
 
 func FindUserByEmailandUserName(email string, username string) (*models.Patient, error) {
 	user := &models.Patient{}
-	// SELECT * from patient table where email = ?
+	// SELECT * from doctor table where email = ?
 	err := DB.Where("email = ?", email).First(user).Error
 	if err != nil {
 		err = DB.Where("username = ?", username).First(user).Error
@@ -41,6 +41,7 @@ func FindUserByEmailandUserName(email string, username string) (*models.Patient,
 }
 
 func CreatePatientInTable(user models.Patient) {
+	//MYSQL: INSERT IN patient TABLE...
 	if err := DB.Create(user).Error; err != nil {
 		fmt.Println(err)
 		return
@@ -49,14 +50,11 @@ func CreatePatientInTable(user models.Patient) {
 
 func FindDocByEmailandUserName(email string, username string) (*models.Doctor, error) {
 	user := &models.Doctor{}
-	// SELECT * from patient table where email = ?
-	err := DB.Where("email = ?", email).First(user).Error
-	if err != nil {
-		err = DB.Where("username = ?", username).First(user).Error
+	// SELECT * from Doctor table where email = ?
+	err := DB.Where("email = ?","username = ?", email, username).First(user).Error
 		if err != nil {
 			return nil, err
 		}
-	}
 	return user, nil
 }
 

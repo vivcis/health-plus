@@ -2,13 +2,15 @@ package handlers
 
 import (
 	"fmt"
+	"html/template"
+	"net/http"
+	"strconv"
+	"strings"
+
 	"github.com/decadev/squad10/healthplus/db"
 	"github.com/decadev/squad10/healthplus/models"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
-	"html/template"
-	"net/http"
-	"strconv"
 )
 
 //Indexhandler gets the homepage
@@ -121,23 +123,16 @@ func RegisterDoctorHandler(w http.ResponseWriter, r *http.Request) {
 func PostRegisterDoctorHandler(w http.ResponseWriter, r *http.Request) {
 	var user models.Doctor
 
-	r.ParseForm()
-	name := r.FormValue("name")
 	ageString := r.FormValue("ageString")
-	email := r.FormValue("email")
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-	speciality := r.FormValue("speciality")
-
 	age, _ := strconv.Atoi(ageString)
 
 	user.ID = uuid.NewString()
-	user.Name = name
+	user.Name = strings.TrimSpace(r.FormValue("name"))
 	user.Age = uint(age)
-	user.Email = email
-	user.Username = username
-	user.Password = password
-	user.Specialty = speciality
+	user.Email = strings.TrimSpace(r.FormValue("email"))
+	user.Username = strings.TrimSpace(r.FormValue("username"))
+	user.Password = strings.TrimSpace(r.FormValue("password"))
+	user.Specialty = strings.TrimSpace(r.FormValue("speciality"))
 
 	_, err := db.FindDocByEmailandUserName(user.Email, user.Username)
 	if err == nil {
