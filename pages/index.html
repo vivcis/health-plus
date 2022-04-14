@@ -2,9 +2,210 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Plus</title>
+    <nav>
+                
+        <div class="navbar">
+          <a href="" class="nav1">Home</a>
+          <a href="#about-us" class="nav1">About Us</a>
+          <a href="#services" class="nav1">Services</a>
+          <a href="/patientLogin" class="nav1">Login</a>
+          <input class="search" type="text" placeholder="Search..">
+       </div>
+       
+       
+   </nav>
+    <style> 
+
+      body{
+          background-image: url(../pages/pic1.jpg);
+      }
+    
+      .navbar {
+              width: 100%;
+              overflow: hidden;
+              position: fixed;
+              top: 0;
+              z-index: 3;
+              background-color: rgb(148, 198, 241);
+              padding-top: 2px;
+              padding-bottom: 3px;
+              }
+        .navbar a {
+            font-weight: bold;
+            float: left;
+            display:block;
+            color: rgb(246, 246, 252);
+            font-family: Arial, Helvetica, sans-serif;
+            text-decoration: none;
+            font-size: 20px;
+            width: 10%; 
+            text-align: right; 
+            padding: 17px, 16px;
+            
+            
+}
+        .navbar a:hover {
+         background-color: rgb(177, 225, 236);
+         background: #ddd;
+        }
+        .search {
+            margin-left: 620px;
+            padding: 4px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        body {
+        background-image: url("pic1.jpg");
+}
+
+        
+        .bttn{
+            background-color: rgb(29, 76, 206);
+            padding: 7px;
+            border: 0px;
+        }
+        
+        .p1{ 
+            position:absolute;
+             
+            font-weight: bold ;
+            font-size: 60px;
+            padding-top: 240px;
+            padding-left: 190px;
+            padding-right: 0px;
+            color: rgb(19, 110, 214);
+        }  
+        .p2{
+            position: relative;
+            font-size: 100px;
+            padding-top: 350px;
+            padding-left: 340px;
+            margin-bottom: -20px;
+            color: rgb(19, 214, 29);
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-weight: bolder;
+            
+        }
+        .p3{
+            position: absolute;
+            margin-top: 50px;
+            font-size: 140px;
+            padding-left: 150px;
+            padding-top: 20px;
+            color: blue;
+            font-weight: bolder;
+        }
+        .p4{
+            position: absolute;
+            margin-top: -17px;
+            font-size: 250px;
+            font-weight:bolder ;
+            padding-left: 790px;
+            padding-top: 20px;
+            color: rgb(19, 214, 29);
+        }
+        .signup1{
+            position:absolute;
+            padding-left: 140px;
+            margin-top: 30px;
+            border-radius: 5px;
+            display:inline-flex;
+            width: 370px;
+            height: 50px;
+            background-color: rgb(13, 13, 153);
+            font-size: 30px;
+            color: rgb(253, 253, 253);
+        }
+        .signup2{
+            position:relative;
+            padding-left: 140px;
+            margin-top: 40px;
+            border-radius: 5px;
+            display:inline-flex;
+            width: 370px;
+            height: 50px;
+            background-color: rgb(13, 13, 153);
+            font-size: 30px;
+            color: rgb(255, 255, 255);
+        }
+        .size{
+            padding-left: 250px;
+            padding-bottom: 52px;
+
+            margin-top: 20px;
+        }
+
+       
+        .sign{
+            position: absolute;
+            padding-left: 380px;
+            margin-top: 05px;
+            font-size: 35px;
+            margin-bottom: 30px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bolder;
+            color: rgb(13, 13, 153);
+        }
+       a{
+           text-decoration: none;
+           color: white;
+       }
+        body {
+            width: 100%;
+            object-fit: content;
+            background-image:url(./pic1.jpg) ;
+            background-color: aliceblue ;
+        }
+        .par {
+            padding-top: 90px;
+            font-size: 160px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: rgb(42, 90, 221);
+        }
+        .par1{
+            font-size: 50px;
+            margin-top: -170px;
+            margin-bottom: 110px;
+           padding-left: 370px;
+            width: 900px; 
+            word-break: keep-all;
+            color: rgb(13, 13, 153);
+        }
+        #id{
+            margin-bottom: 70px;
+        }
+        .par4{
+            padding-bottom: 100px;
+            font-size: 30px;
+            padding-left: 300px;
+            color: rgb(7, 41, 134);
+            word-break: keep-all;
+            width:580px;
+        }
+        #services{
+            margin-top: 400px;
+            margin-bottom: 260px;
+        }
+        .par5{
+            color: rgb(19, 110, 214);
+            font-size: 70px;
+            padding-bottom: 40px;
+            margin-top: -50px;
+        }
+        .par6{
+            word-break:keep-all;
+            width:580px;
+            font-size: 30px;
+        }
+            </style>
 </head>
 <body>
+
 <header>
     <nav>
         <ul>
@@ -16,8 +217,47 @@
 <H1>SEE A DOCTOR</H1>
 <a href="/registerPatient">Register</a>
 <a href="/registerDoctor">Register Doc</a>
+    <!-- <img src="../pages/static/images/pic1.jpg"> -->
+  
+    <span class="p4">+</span> 
+    <span class="p3">Healthplus</span> 
+    
+    <p class="p1">MEDICAL CARE</p>
+    <p class="p2">24/7</p> 
+    <br> <br>
+    
+    
+    <div>
+        <p id="home" class="sign">Sign-up</p></div>
+       <div class="size"> <button class="signup1"><a href="/" target="">Doctor</a></button>
+        <br>
+        <br>
+        <br>
+        <button class="signup2"> <a href="/registerPatient" target="">Patient</a></button>
+    </div> 
 
-</form>
+    <div id="about-us">
+
+       <p class="par">MISSION</p>
+       <div>
+       <p class="par1">Our foundational belief lies on the maxim that health is wealth. And in an attempt to be wealthy, 
+           we believe that everbody must have access to reliable doctors and health services.
+          <b><i>that's where we come in...</b></i>
+       </p>
+      </div>
+
+    <div id="services">
+        <p class="par5">WHAT DO WE OFFER?</p>
+        <div class="par6"><ul>
+            <li>ONLINE CONSULTATION: Stop googling your symptoms, <b>ASK AN EXPERT</b></li>
+            <br>
+            <li>BOOK APPOINTMENTS WORLDCLASS DOCTORS</li>
+            <br>
+            <li>MEET SPECIALISTS IN THEIR VARIOUS FIELDS</li>
+        </ul>
+    </div>
+     </div> 
+    
+    
 </body>
 </html>
-
