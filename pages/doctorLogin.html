@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Health Plus</title>
+    <style>
+        img{
+            width: 100%;
+            object-fit: contain;
+}
+    </style>
+</head>
+<body>
+    <img src="../pages/static/images/pic1.png">
+<header>
+    <nav>
+        <ul>
+            <li><button><a href="/" target="">Login</a></button></li>
+        </ul>
+    </nav>
+</header>
+
+    <h2>Login</h2><br>
+    <form action="/loginauth" method="POST">
+        <label for="username">Username:</label><br>
+        <input type="text" name="username" id="username"><br>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <br><br>
+    {{if .}}
+      {{ .}}
+    {{end}}
+
+</body>
+</html>
