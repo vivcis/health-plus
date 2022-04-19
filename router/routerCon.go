@@ -2,13 +2,18 @@ package router
 
 import (
 	"fmt"
+	"net/http"
+	"time"
+
+	"github.com/alexedwards/scs/v2"
 	"github.com/decadev/squad10/healthplus/handlers"
 	"github.com/gorilla/mux"
-	"net/http"
 	"os"
 )
 
 func SetupRouter() {
+  handlers.Sessions  = scs.New()
+	handlers.Sessions.Lifetime = 24 * time.Hour
 	router := mux.NewRouter()
 	router.HandleFunc("/", handlers.Indexhandler).Methods("GET")
 	router.HandleFunc("/registerPatient", handlers.RegisterPatientHandler).Methods("GET")
@@ -26,7 +31,16 @@ func SetupRouter() {
 
 	port := os.Getenv("DB_PORT")
 
-	e := http.ListenAndServe(port, router)
+  router.HandleFunc("/doctorLogin", handlers.PostLoginDoctordHandler).Methods("POST")
+  router.HandleFunc("/doctorLogout", handlers.DoctorLogoutHandler).Methods("GET")
+  router.HandleFunc("/doctorDashboard", handlers.DoctorHomeHandler).Methods("GET")
+
+	//router.Get("/doctorHome", handlers.DoctorHomeHandler)
+
+	e := http.ListenAndServe(port, handlers.Sessions.LoadAndSave(router))
+
+// 	e := http.ListenAndServe(port, router)
+
 	if e != nil {
 		fmt.Println(e)
 		return
