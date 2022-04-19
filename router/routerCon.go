@@ -3,27 +3,32 @@ package router
 import (
 	"fmt"
 	"github.com/decadev/squad10/healthplus/handlers"
-	"github.com/go-chi/chi"
+	"github.com/gorilla/mux"
 	"net/http"
+	"os"
 )
 
 func SetupRouter() {
-	router := chi.NewRouter()
+	router := mux.NewRouter()
+	router.HandleFunc("/", handlers.Indexhandler).Methods("GET")
+	router.HandleFunc("/registerPatient", handlers.RegisterPatientHandler).Methods("GET")
+	router.HandleFunc("/registerPatient", handlers.PostRegisterPatientHandler).Methods("POST")
+	router.HandleFunc("/patientLogin", handlers.PatientLoginHandler).Methods("GET")
+	router.HandleFunc("/registerDoctor", handlers.RegisterDoctorHandler).Methods("GET")
+	router.HandleFunc("/registerDoctor", handlers.PostRegisterDoctorHandler).Methods("POST")
+	router.HandleFunc("/doctorLogin", handlers.DoctorLoginHandler).Methods("GET")
+
+	fs := http.FileServer(http.Dir("./pages/static/"))
+	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
+	//http.Handle("/", router)
+
 	fmt.Println("Server up and Running")
 
-	router.Get("/", handlers.Indexhandler)
-	router.Get("/registerPatient", handlers.RegisterPatientHandler)
-	router.Post("/registerPatient", handlers.PostRegisterPatientHandler)
-	router.Get("/patientLogin", handlers.PatientLoginHandler)
+	port := os.Getenv("DB_PORT")
 
-	router.Get("/registerDoctor", handlers.RegisterDoctorHandler)
-	router.Post("/registerDoctor", handlers.PostRegisterDoctorHandler)
-	router.Get("/doctorLogin", handlers.DoctorLoginHandler)
-
-	e := http.ListenAndServe(":8084", router)
+	e := http.ListenAndServe(port, router)
 	if e != nil {
 		fmt.Println(e)
 		return
 	}
-
 }
