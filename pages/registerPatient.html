@@ -1,38 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Health Plus</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="./style.css" />
+    <title>Signup</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+        *{
+            margin:0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html,body{
+            height: 100%;
+        }
+
+        body{
+            display: grid;
+            place-items: center;
+            text-align: center;
+            background: hsl(191, 37%, 85%);
+        }
+
+        .content{
+            width: 330px;
+            background: hsl(191, 37%, 85%);
+            border-radius: 10px;
+            padding: 40px 30px;
+            box-shadow: -3px -3px 7px #ffffff73,
+            2px 2px 5px rgba(94, 104, 121, 0.288);
+        }
+        .content img{
+            width: 90px;
+            height: 90px;
+            margin-top: -100px;
+            border-radius: 50px;
+            box-shadow:
+
+                    0px 0px 2px #5f5f5f,
+                    0px 0px 0px 5px #ecf0f3,
+                    8px 8px 15px #a7aaaf,
+                    -8px -8px 15px #ffffff
+        ;
+        }
+
+        .content .text{
+            font-size: 25px;
+            font-weight: 600;
+            margin-bottom: 35px;
+            color: #000;
+        }
+
+        .content .field{
+            height: 50px;
+            width: 100%;
+            display: flex;
+            position: relative;
+        }
+
+        .field input{
+            height: 100%;
+            width: 100%;
+            padding-left: 45px;
+            font-size: 18px;
+            outline: none;
+            border: none;
+            color: #595959;
+            background: #dde1e7;
+            border-radius: 25px;
+            box-shadow: inset 2px 2px 5px #babecc,
+            inset -5px -5px 10px #ffffff73;
+        }
+
+        .field input:focus ~ label{
+            box-shadow: inset 2px 2px 5px #babecc,
+            inset -1px -1px 2px #ffffff73;
+        }
+
+        /* .field:nth-child(2){
+          margin-top: 20px;
+        } */
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        .field span{
+            position: absolute;
+            width: 50px;
+            line-height: 50px;
+            color: #595959;
+        }
+
+        .field label{
+            position: absolute;
+            top: 50%;
+            left: 45px;
+            pointer-events: none;
+            color: #666666;
+            transform: translateY(-50%);
+        }
+
+
+        .field input:focus ~ label{
+            opacity: 0;
+        }
+
+
+        button{
+            margin: 25px 0 0 0;
+            width: 100%;
+            height: 50px;
+            color: #000;
+            font-size: 18px;
+            font-weight: 600;
+            background: #dde1e7;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            border-radius: 25px;
+            box-shadow: 2px 2px 5px #babecc,
+            -5px -5px 10px #ffffff73;
+        }
+
+        button:focus{
+            color: #3498db;
+            box-shadow: inset 2px 2px 5px #babecc,
+            inset -5px -5px 10px #ffffff73;
+        }
+
+    </style>
+
 </head>
-
 <body>
+<div class="content">
+    <img src="/images/HealthPlus logo.png" alt="logo">
 
-<header>
-<h2>Account Registration</h2><br>
-<ul>
+    <div class="text">Healthplus+</div>
+    <form method="POST">
+        <div class="field">
+            <span class="fa fa-user"></span>
+            <input type="text" id="name" name="name" required />
+            <label>Name</label>
+        </div>
 
-</ul><br>
-</header>
+        <div class="field">
+            <span class="fa fa-circle"></span>
+            <input type="number" id="age" name="age" required />
+            <label>Age</label>
+        </div>
 
-<form method="POST">
-    <label for="name" >Name:</label><br>
-    <input type="text" id="name" name="name" required><br>
+        <div class="field">
+            <span class="fa fa-envelope"></span>
+            <input type="email" id="email" name="email" required />
+            <label>Email</label>
+        </div>
 
-    <label for="age">Age:</label><br>
-    <input type="number" id="age" name="age" required><br>
+        <div class="field">
+            <span class="fa fa-user"></span>
+            <input type="text" id="username" name="username" required />
+            <label>Username</label>
+        </div>
 
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email" required><br>
+        <div class="field">
+            <span class="fa fa-lock"></span>
+            <input type="password" id="password" name="password" required />
+            <label>Password</label>
+        </div>
 
-    <label for="username">Username:</label><br>
-    <input type="text" id="username" name="username" required><br><br>
+        <button type="submit" value="submit">Register</button>
+        <p>Already a member?</p>
+        <a href="/patientLogin">Login</a>
+    </form>
 
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password" required><br><br>
 
-    <input type="submit" value="Submit">
-</form>
 
+</div>
 
 <br><br>
 {{ .}}

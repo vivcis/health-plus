@@ -12,7 +12,7 @@ var DB *gorm.DB
 
 func SetupDB() {
 
-	dsn := "root:appliCATION123@#@tcp(127.0.0.1:3306)/hospital?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:houseno6@tcp(127.0.0.1:3306)/hospital?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println(err)
@@ -52,10 +52,10 @@ func CreatePatientInTable(user models.Patient) {
 func FindDocByEmailandUserName(email string, username string) (*models.Doctor, error) {
 	user := &models.Doctor{}
 	// SELECT * from Doctor table where email = ?
-	err := DB.Where("email = ?","username = ?", email, username).First(user).Error
-		if err != nil {
-			return nil, err
-		}
+	err := DB.Where("email = ?", "username = ?", email, username).First(user).Error
+	if err != nil {
+		return nil, err
+	}
 	return user, nil
 }
 
