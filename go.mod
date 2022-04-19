@@ -12,6 +12,7 @@ require (
 )
 
 require (
+	github.com/alexedwards/scs/v2 v2.5.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
 )

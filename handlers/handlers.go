@@ -7,11 +7,14 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/decadev/squad10/healthplus/db"
 	"github.com/decadev/squad10/healthplus/models"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
+
+var Sessions *scs.SessionManager
 
 //Indexhandler gets the homepage
 func Indexhandler(w http.ResponseWriter, r *http.Request) {
@@ -176,4 +179,43 @@ func DoctorLoginHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(e)
 		return
 	}
+}
+
+func PostLoginDoctordHandler(w http.ResponseWriter, r *http.Request) {
+    var user models.Doctor
+    user.Username = strings.TrimSpace(r.FormValue("username"))
+    user.Password = strings.TrimSpace(r.FormValue("password"))
+    _, err := db.Authenticate(user.Username, user.Password)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    Sessions.Put(r.Context(), "username", user.Username)
+    http.Redirect(w, r, "/doctorDashboard", http.StatusFound)
+}
+
+//------------------------------DoctorDashboardHandler gets Doctor's Dashboard page-----------------------------------------------
+func DoctorHomeHandler(w http.ResponseWriter, r *http.Request) {
+    t, e := template.ParseFiles("pages/doctorHome.html")
+    if e != nil {
+        fmt.Println(e)
+        return
+    }
+    userName := Sessions.GetString(r.Context(), "username")
+    doc, err := db.FindDoctorByUsername(userName)
+    if err != nil {
+        fmt.Println( err)
+        return
+    }
+    e = t.Execute(w, doc)
+    if e != nil {
+        fmt.Println(e)
+        return
+    }
+}
+
+//------------------------------DoctorLogoutHandler logsout ---------------------------------------------------------------------
+func DoctorLogoutHandler(w http.ResponseWriter, r *http.Request) {
+    Sessions.Remove(r.Context(), "username")
+    http.Redirect(w, r, "/", http.StatusFound)
 }

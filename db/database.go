@@ -2,8 +2,10 @@ package db
 
 import (
 	"fmt"
+
 	"github.com/decadev/squad10/healthplus/models"
 	_ "github.com/go-sql-driver/mysql"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -12,7 +14,7 @@ var DB *gorm.DB
 
 func SetupDB() {
 
-	dsn := "root:houseno6@tcp(127.0.0.1:3306)/hospital?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:appliCATION123@#@tcp(127.0.0.1:3306)/hospital?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println(err)
@@ -64,4 +66,29 @@ func CreateDocInTable(user models.Doctor) {
 		fmt.Println(err)
 		return
 	}
+}
+
+func Authenticate(username, password string) (*models.Doctor, error) {
+    //Retrieve the username and hashed password associated with the given username.
+    //If matching username exists, return the ErrMismatchedHashAndPassword error.
+    user := &models.Doctor{}
+    err := DB.Where("username = ?", username).First(user).Error
+    if err != nil {
+        return nil, err
+    }
+    // Check whether the hashed password and plain-text password provided match
+    // If they don't, we return the ErrInvalidCredentials error.
+    err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
+    if err != nil {
+        return nil, bcrypt.ErrMismatchedHashAndPassword
+    }
+    return user, nil
+}
+func FindDoctorByUsername(username string) (*models.Doctor, error) {
+    user := &models.Doctor{}
+    err := DB.Where("username = ?", username).First(user).Error
+    if err != nil {
+        return nil, err
+    }
+    return user, nil
 }
