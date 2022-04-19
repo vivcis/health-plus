@@ -8,7 +8,6 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/decadev/squad10/healthplus/handlers"
 	"github.com/gorilla/mux"
-	"net/http"
 	"os"
 )
 
