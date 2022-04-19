@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-
 	"github.com/alexedwards/scs/v2"
 	"github.com/decadev/squad10/healthplus/db"
 	"github.com/decadev/squad10/healthplus/models"
@@ -107,6 +106,54 @@ func PatientLoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//------------------------------PostPatientLoginHandler logs in doctor if valid-----------------------------------------------------
+func PostLoginPatientdHandler(w http.ResponseWriter, r *http.Request) {
+    var user models.Doctor
+    user.Username = strings.TrimSpace(r.FormValue("username"))
+    user.Password = strings.TrimSpace(r.FormValue("password"))
+    _, err := db.AuthenticatePatient(user.Username, user.Password)
+    if err != nil {
+        t, e := template.ParseFiles("pages/patientLogin.html")
+		if e != nil {
+		fmt.Println(e)
+		return
+	}
+		e = t.Execute(w, "Check username or Password")
+		if e != nil {
+		fmt.Println(e)
+		return
+	}
+        return
+    }
+    Sessions.Put(r.Context(), "username", user.Username)
+    http.Redirect(w, r, "/patientDashboard", http.StatusFound)
+}
+
+//------------------------------PatientDashboardHandler gets Patient's Dashboard page-----------------------------------------------
+func PatientHomeHandler(w http.ResponseWriter, r *http.Request) {
+    t, e := template.ParseFiles("pages/patientDashboard.html")
+    if e != nil {
+        fmt.Println(e)
+        return
+    }
+    userName := Sessions.GetString(r.Context(), "username")
+    patient, err := db.FindPatientByUsername(userName)
+    if err != nil {
+        fmt.Println( err)
+        return
+    }
+    e = t.Execute(w, patient)
+    if e != nil {
+        fmt.Println(e)
+        return
+    }
+}
+//------------------------------PatientLogoutHandler logsout ---------------------------------------------------------------------
+func PatientLogoutHandler(w http.ResponseWriter, r *http.Request) {
+    Sessions.Remove(r.Context(), "username")
+    http.Redirect(w, r, "/", http.StatusFound)
+}
+
 
 //-------------------------RegisterDoctorHandler gets Doctor's SignUp page-----------------------------------------------
 func RegisterDoctorHandler(w http.ResponseWriter, r *http.Request) {
@@ -135,7 +182,7 @@ func PostRegisterDoctorHandler(w http.ResponseWriter, r *http.Request) {
 	user.Email = strings.TrimSpace(r.FormValue("email"))
 	user.Username = strings.TrimSpace(r.FormValue("username"))
 	user.Password = strings.TrimSpace(r.FormValue("password"))
-	user.Specialty = strings.TrimSpace(r.FormValue("speciality"))
+	user.Specialty = strings.TrimSpace(r.FormValue("specialty"))
 
 	_, err := db.FindDocByEmailandUserName(user.Email, user.Username)
 	if err == nil {
@@ -185,12 +232,21 @@ func PostLoginDoctordHandler(w http.ResponseWriter, r *http.Request) {
     var user models.Doctor
     user.Username = strings.TrimSpace(r.FormValue("username"))
     user.Password = strings.TrimSpace(r.FormValue("password"))
-    _, err := db.Authenticate(user.Username, user.Password)
+    usa, err := db.Authenticate(user.Username, user.Password)
     if err != nil {
-        fmt.Println(err)
+        t, e := template.ParseFiles("pages/doctorLogin.html")
+	if e != nil {
+		fmt.Println(e)
+		return
+	}
+	e = t.Execute(w, "Check Username or Password")
+	if e != nil {
+		fmt.Println(e)
+		return
+	}
         return
     }
-    Sessions.Put(r.Context(), "username", user.Username)
+    Sessions.Put(r.Context(), "username", usa.Username)
     http.Redirect(w, r, "/doctorDashboard", http.StatusFound)
 }
 
