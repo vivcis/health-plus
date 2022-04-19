@@ -37,9 +37,9 @@ func SetupRouter() {
 
 	//router.Get("/doctorHome", handlers.DoctorHomeHandler)
 
-	e := http.ListenAndServe(":8084", handlers.Sessions.LoadAndSave(router))
+	e := http.ListenAndServe(port, handlers.Sessions.LoadAndSave(router))
 
-	//e := http.ListenAndServe(port, router)
+// 	e := http.ListenAndServe(port, router)
 
 	if e != nil {
 		fmt.Println(e)
