@@ -95,3 +95,28 @@ func FindDoctorByUsername(username string) (*models.Doctor, error) {
     }
     return user, nil
 }
+
+func AuthenticatePatient(username, password string) (*models.Patient, error) {
+    //Retrieve the username and hashed password associated with the given username.
+    //If matching username exists, return the ErrMismatchedHashAndPassword error.
+    user := &models.Patient{}
+    err := DB.Where("username = ?", username).First(user).Error
+    if err != nil {
+        return nil, err
+    }
+    // Check whether the hashed password and plain-text password provided match
+    // If they don't, we return the ErrInvalidCredentials error.
+    err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
+    if err != nil {
+        return nil, bcrypt.ErrMismatchedHashAndPassword
+    }
+    return user, nil
+}
+func FindPatientByUsername(username string) (*models.Patient, error) {
+    user := &models.Patient{}
+    err := DB.Where("username = ?", username).First(user).Error
+    if err != nil {
+        return nil, err
+    }
+    return user, nil
+}

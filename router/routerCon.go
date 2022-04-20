@@ -19,9 +19,15 @@ func SetupRouter() {
 	router.HandleFunc("/registerPatient", handlers.RegisterPatientHandler).Methods("GET")
 	router.HandleFunc("/registerPatient", handlers.PostRegisterPatientHandler).Methods("POST")
 	router.HandleFunc("/patientLogin", handlers.PatientLoginHandler).Methods("GET")
+	router.HandleFunc("/patientLogin", handlers.PostLoginPatientdHandler).Methods("POST")
 	router.HandleFunc("/registerDoctor", handlers.RegisterDoctorHandler).Methods("GET")
 	router.HandleFunc("/registerDoctor", handlers.PostRegisterDoctorHandler).Methods("POST")
 	router.HandleFunc("/doctorLogin", handlers.DoctorLoginHandler).Methods("GET")
+	router.HandleFunc("/doctorLogin", handlers.PostLoginDoctordHandler).Methods("POST")
+ 	router.HandleFunc("/doctorLogout", handlers.DoctorLogoutHandler).Methods("GET")
+  	router.HandleFunc("/doctorDashboard", handlers.DoctorHomeHandler).Methods("GET")
+	router.HandleFunc("/patientDashboard", handlers.PatientHomeHandler).Methods("GET")
+	router.HandleFunc("/patientLogout", handlers.PatientLogoutHandler).Methods("GET")
 
 	fs := http.FileServer(http.Dir("./pages/static/"))
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
@@ -31,11 +37,7 @@ func SetupRouter() {
 
 	port := os.Getenv("DB_PORT")
 
-  router.HandleFunc("/doctorLogin", handlers.PostLoginDoctordHandler).Methods("POST")
-  router.HandleFunc("/doctorLogout", handlers.DoctorLogoutHandler).Methods("GET")
-  router.HandleFunc("/doctorDashboard", handlers.DoctorHomeHandler).Methods("GET")
 
-	//router.Get("/doctorHome", handlers.DoctorHomeHandler)
 
 	e := http.ListenAndServe(port, handlers.Sessions.LoadAndSave(router))
 
