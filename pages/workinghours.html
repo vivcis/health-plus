@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -54,31 +54,38 @@
             height: 720px;
             background-color: hsl(191, 37%, 85%);
         }
-       
 
 
-</style>
+
+    </style>
 </head>
 <body>
 <div class="container">
     <nav>
-       <img src="/static/images/tinywow_remove_bg_1868557.png" alt="logo" />
+        <img src="/static/images/tinywow_remove_bg_1868557.png" alt="logo" />
         <ul>
-            <li><a href="/doctorList">Book Appointment</a></li>
-            <li><a href="/patientLogout">Log Out</a></li>
-            
+            <li><a href="/doctorDashboard">Dashboard</a></li>
+            <li><a href="/doctorLogout">Log Out</a></li>
+
         </ul>
     </nav>
 </div>
 
 <main>
-    <br>
-    <h1>WELCOME {{ .Name}}</h1>
-    <p>IT IS A GOOD DAY TO STAY HEALTHY</p>
-    <br><br>
-    <h2>YOUR HEALTH PLUS+ CARD-NUMBER IS: {{.ID}}</h2>
-    <h3><a href="/checkappointments">SCHEDULED APPOINTMENTS</a></h3>
-    
+    <h1>CHOOSE YOUR WORK HOURS</h1>
+    <div>
+        <form method="post" >
+            <input type="radio" name="workhour" value="8am - 4pm" > 8am - 4pm </input>
+            <br><br>
+            <input type="radio" name="workhour" value="4pm - 12am" > 4pm - 12am </input>
+            <br><br>
+            <input type="radio" name="workhour" value="12am - 8am" > 12am - 8am </input>
+            <br><br>
+            <input type="radio" name="workhour" value="NOT AVAILABLE" > NOT AVAILABLE </input>
+            <br><br>
+            <input type="submit">
+        </form>
+    </div>
 </main>
 </body>
 </html>

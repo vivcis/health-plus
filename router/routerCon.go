@@ -12,7 +12,7 @@ import (
 )
 
 func SetupRouter() {
-  handlers.Sessions  = scs.New()
+	handlers.Sessions = scs.New()
 	handlers.Sessions.Lifetime = 24 * time.Hour
 	router := mux.NewRouter()
 	router.HandleFunc("/", handlers.Indexhandler).Methods("GET")
@@ -24,10 +24,20 @@ func SetupRouter() {
 	router.HandleFunc("/registerDoctor", handlers.PostRegisterDoctorHandler).Methods("POST")
 	router.HandleFunc("/doctorLogin", handlers.DoctorLoginHandler).Methods("GET")
 	router.HandleFunc("/doctorLogin", handlers.PostLoginDoctordHandler).Methods("POST")
- 	router.HandleFunc("/doctorLogout", handlers.DoctorLogoutHandler).Methods("GET")
-  	router.HandleFunc("/doctorDashboard", handlers.DoctorHomeHandler).Methods("GET")
+	router.HandleFunc("/doctorLogout", handlers.DoctorLogoutHandler).Methods("GET")
+	router.HandleFunc("/doctorDashboard", handlers.DoctorHomeHandler).Methods("GET")
 	router.HandleFunc("/patientDashboard", handlers.PatientHomeHandler).Methods("GET")
 	router.HandleFunc("/patientLogout", handlers.PatientLogoutHandler).Methods("GET")
+
+	router.HandleFunc("/doctorList", handlers.DoctorListHandler).Methods("GET")
+	router.HandleFunc("/workinghours", handlers.DoctorWorkingHoursHandler).Methods("GET")
+	router.HandleFunc("/workinghours", handlers.ChooseHoursHandler).Methods("POST")
+	router.HandleFunc("/appointment/{ID}", handlers.BookByIdHandler).Methods("GET")
+	router.HandleFunc("/appointment/{ID}", handlers.PostBookByIdHandler).Methods("POST")
+	router.HandleFunc("/checkappointments", handlers.CheckPatientAppointmentHandler).Methods("GET")
+	router.HandleFunc("/cancel/{ID}", handlers.DeletePatientAppointmentHandler).Methods("GET")
+	router.HandleFunc("/viewdocappointments", handlers.CheckDoctorAppointmentHandler).Methods("GET")
+	router.HandleFunc("/canceldoc/{ID}", handlers.DeleteDoctorAppointmentHandler).Methods("GET")
 
 	fs := http.FileServer(http.Dir("./pages/static/"))
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
@@ -37,11 +47,9 @@ func SetupRouter() {
 
 	port := os.Getenv("DB_PORT")
 
-
-
 	e := http.ListenAndServe(port, handlers.Sessions.LoadAndSave(router))
 
-// 	e := http.ListenAndServe(port, router)
+	// 	e := http.ListenAndServe(port, router)
 
 	if e != nil {
 		fmt.Println(e)
