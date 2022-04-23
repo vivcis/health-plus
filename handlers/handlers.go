@@ -326,10 +326,35 @@ func ChooseHoursHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(e)
 	}
 
-	workHours := r.PostForm.Get("workhour")
+	starttime := r.PostForm.Get("start")
+	closetime := r.PostForm.Get("end")
+	startInt, _ := strconv.Atoi(starttime)
+	closeInt, _ := strconv.Atoi(closetime)
 
+	checkStart := startInt > 12
+	noonStart := startInt == 12
+	fmt.Println(closetime)
+	if checkStart {
+		starttime = starttime + ":" + "PM"
+	} else if noonStart {
+		starttime = starttime + ":" + "PM"
+	} else if !checkStart {
+		starttime = starttime + ":" + "AM"
+	}
+	checkEnd := closeInt > 12
+	noonEnd := closeInt == 12
+	if checkEnd {
+		closetime = closetime + ":" + "PM"
+	} else if noonEnd {
+		closetime = closetime + ":" + "PM"
+	} else {
+		closetime = closetime + ":" + "AM"
+	}
 	//Gorm command to update a field
-	db.DB.Model(&doc).Update("working_hour", workHours)
+	db.DB.Model(&doc).Update("string_start", starttime)
+	db.DB.Model(&doc).Update("string_close", closetime)
+	db.DB.Model(&doc).Update("start_time", startInt)
+	db.DB.Model(&doc).Update("close_time", closeInt)
 
 	//redirect your page back to the index/home page when done (on a click)
 	http.Redirect(w, r, "/doctorDashboard", 302)
@@ -343,47 +368,47 @@ func BookByIdHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("now", err)
 		return
 	}
-	var ans []string
-	var a, b, c, d, e, f, g, h string
+	// var ans []string
+	// var a, b, c, d, e, f, g, h string
 	params := mux.Vars(r)
 	ID := params["ID"]
 
 	doctor := db.FindDoctorByIDandUserName(ID)
-
-	if doctor.WorkingHour == "8am - 4pm" {
-		a = "8am-9am"
-		b = "9am-10am"
-		c = "10am-11am"
-		d = "11am-12pm"
-		e = "12pm-1pm"
-		f = "1pm-2pm"
-		g = "2pm-3pm"
-		h = "3pm-4pm"
-	} else if doctor.WorkingHour == "4pm - 12am" {
-		a = "4pm-5pm"
-		b = "5pm-6pm"
-		c = "6pm-7pm"
-		d = "7pm-8pm"
-		e = "8pm-9pm"
-		f = "9pm-10pm"
-		g = "10pm-11pm"
-		h = "11pm-12am"
-	} else if doctor.WorkingHour == "12am - 8am" {
-		a = "12am-1am"
-		b = "1am-2am"
-		c = "2am-3am"
-		d = "3am-4am"
-		e = "4am-5am"
-		f = "5am-6am"
-		g = "6am-7am"
-		h = "7am-8am"
-	} else if doctor.WorkingHour == "NOT AVAILABLE" {
-		http.Redirect(w, r, "/doctorList", http.StatusFound)
-	}
-	ans = append(ans, a, b, c, d, e, f, g, h)
+	workinghrs := doctor.SetWorkingHours()
+	// if doctor.WorkingHour == "8am - 4pm" {
+	// 	a = "8am-9am"
+	// 	b = "9am-10am"
+	// 	c = "10am-11am"
+	// 	d = "11am-12pm"
+	// 	e = "12pm-1pm"
+	// 	f = "1pm-2pm"
+	// 	g = "2pm-3pm"
+	// 	h = "3pm-4pm"
+	// } else if doctor.WorkingHour == "4pm - 12am" {
+	// 	a = "4pm-5pm"
+	// 	b = "5pm-6pm"
+	// 	c = "6pm-7pm"
+	// 	d = "7pm-8pm"
+	// 	e = "8pm-9pm"
+	// 	f = "9pm-10pm"
+	// 	g = "10pm-11pm"
+	// 	h = "11pm-12am"
+	// } else if doctor.WorkingHour == "12am - 8am" {
+	// 	a = "12am-1am"
+	// 	b = "1am-2am"
+	// 	c = "2am-3am"
+	// 	d = "3am-4am"
+	// 	e = "4am-5am"
+	// 	f = "5am-6am"
+	// 	g = "6am-7am"
+	// 	h = "7am-8am"
+	// } else if doctor.WorkingHour == "NOT AVAILABLE" {
+	// 	http.Redirect(w, r, "/doctorList", http.StatusFound)
+	// }
+	// ans = append(ans, a, b, c, d, e, f, g, h)
 
 	//Calls or writes the item inside that database in the html file/template where it is called
-	err = t.Execute(w, ans)
+	err = t.Execute(w, workinghrs)
 	if err != nil {
 		fmt.Println("now", err)
 		return
@@ -403,20 +428,30 @@ func PostBookByIdHandler(w http.ResponseWriter, r *http.Request) {
 	if e != nil {
 		fmt.Println(e)
 	}
+
 	appointment.ID = uuid.NewString()
 	appointment.AppointmentHour = r.PostForm.Get("time")
 	appointment.Purpose = r.PostForm.Get("purpose")
 	params := mux.Vars(r)
 	appointment.DoctorID = params["ID"]
 	f := db.FindDoctorByID(appointment.DoctorID)
+	fmt.Println(appointment.AppointmentHour)
+	valid := db.CheckAppointmentIsValid(appointment.DoctorID, appointment.AppointmentHour)
 	appointment.DoctorName = f.Name
 	appointment.Date = fmt.Sprintf("%s", time.Now())
 	appointment.PatientName = patient.Name
 	appointment.PatientID = patient.ID
+	if valid == true {
+		db.CreateAppointmentInTable(appointment)
+		http.Redirect(w, r, "/patientDashboard", http.StatusFound)
+	} else {
+		file, err := template.ParseFiles("pages/appointmentError.html")
+		if err != nil {
+			fmt.Println(err)
+		}
+		file.Execute(w, "Appointment Time already taken")
 
-	db.CreateAppointmentInTable(appointment)
-
-	http.Redirect(w, r, "/patientDashboard", http.StatusFound)
+	}
 
 }
 

@@ -81,7 +81,7 @@
         <p style="font-size: 23px">
             SPECIALTY: {{ .Specialty}}
             <br><br>
-            AVAILABLE WORKING HOURS: {{ .WorkingHour}}
+            AVAILABLE WORKING HOURS: {{ .StringStart}} TO {{.StringClose}}
         </p>
         <button><a href="appointment/{{ .ID }}">BOOK APPOINTMENT</a></button>
     </div>

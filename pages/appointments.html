@@ -74,20 +74,29 @@
 <main>
     <br>
     <h1>SELECT FROM AVAILABLE TIME</h1>
+
     <form method="post" >
-        <input type="text" id="time" name="time" placeholder="SELECTED TIME" required />
-        <br><br>
+        <!-- <input type="text" id="time" name="time" placeholder="SELECTED TIME" required />
+        <br><br> -->
+<label for="time"> Select from Available Time</label>
+        <select name="time" id="time">
+
+            {{range $key, $value:= .}}
+            <option value="{{$value}}">{{$value}}</option>
+            {{end}}
+         </select>
+         <br><br>
         <input type="text" id="purpose" name="purpose" placeholder="PURPOSE" required />
         <br><br>
         <button type="submit">BOOK</button>
     </form>
 
-    {{range $i, $v:= .}}
+    <!-- {{range $i, $v:= .}}
     <br>
     <div class="">
         <p>{{.}}</p>
     </div>
-    {{end}}
+    {{end}} -->
 </main>
 </body>
 </html>

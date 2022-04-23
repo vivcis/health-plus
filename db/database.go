@@ -17,6 +17,7 @@ func SetupDB() {
 	dbDatabase := os.Getenv("DB")
 	root := os.Getenv("DB_ROOTS")
 	dsn := fmt.Sprintf("%s:%s@tcp(127.0.0.1:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local", root, password, dbDatabase)
+	//dsn := "root:00000000@tcp(127.0.0.1:3306)/hospital?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println(err)
@@ -143,7 +144,7 @@ func GetAllDoctors() []models.Doctor {
 
 	for rows.Next() {
 		var r models.Doctor
-		err := rows.Scan(&r.ID, &r.Username, &r.Name, &r.Age, &r.Email, &r.PasswordHash, &r.Specialty, &r.WorkingHour)
+		err := rows.Scan(&r.ID, &r.Username, &r.Name, &r.Age, &r.Email, &r.PasswordHash, &r.Specialty, &r.StartTime, &r.CloseTime, &r.StringStart, &r.StringClose)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -203,7 +204,19 @@ func DeleteAppointmentbyID(id string) {
 	defer del.Close()
 	del.Exec(id)
 }
+func CheckAppointmentIsValid(id string, time string) bool {
+	sqlDB, _ := DB.DB()
+	rows, err := sqlDB.Query("SELECT * FROM appointments WHERE doctor_id = ? AND appointment_hour = ?", id, time)
+	if err != nil {
+		fmt.Println(err)
+	}
+	tr := rows.Next()
+	if tr == true {
+		return false
+	}
+	return true
 
+}
 func FindDoctorAppointment(id string) []models.Appointment {
 	sqlDB, _ := DB.DB()
 
