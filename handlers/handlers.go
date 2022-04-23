@@ -49,26 +49,22 @@ func RegisterPatientHandler(w http.ResponseWriter, r *http.Request) {
 func PostRegisterPatientHandler(w http.ResponseWriter, r *http.Request) {
 	var user models.Patient
 	r.ParseForm()
-	name := r.FormValue("name")
-	ageString := r.FormValue("ageString")
+	name := models.Capitalise(r.FormValue("name"))
+	ageString := r.FormValue("age")
 	email := r.FormValue("email")
 	username := r.FormValue("username")
 	password := r.FormValue("password")
-
 	age, _ := strconv.Atoi(ageString)
-
 	user.ID = uuid.NewString()
 	user.Name = name
 	user.Age = uint(age)
 	user.Email = email
 	user.Username = username
 	user.Password = password
-
 	_, err := db.FindUserByEmailandUserName(user.Email, user.Username)
 	if err == nil {
 		// this user already exists
 		// return a message to the user
-
 		t, e := template.ParseFiles("pages/registerPatient.html")
 		if e != nil {
 			fmt.Println(e)
@@ -79,19 +75,19 @@ func PostRegisterPatientHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(e)
 			return
 		}
-
 	}
-
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	user.PasswordHash = string(hashedPassword)
-
 	db.CreatePatientInTable(user)
-
-	http.Redirect(w, r, "/patientLogin", http.StatusFound)
+	file, err3 := template.ParseFiles("pages/registerPatient.html")
+	if err3 != nil {
+		fmt.Println(err3)
+	}
+	file.Execute(w, name+" "+" is now a Registered Patient. \n You can Login")
 
 }
 
@@ -175,21 +171,17 @@ func RegisterDoctorHandler(w http.ResponseWriter, r *http.Request) {
 //-------------------PostRegisterDoctorHandler successfully registers doctor's name in the db if valid----------------------------
 func PostRegisterDoctorHandler(w http.ResponseWriter, r *http.Request) {
 	var user models.Doctor
-
-	ageString := r.FormValue("ageString")
+	ageString := r.FormValue("age")
 	age, _ := strconv.Atoi(ageString)
-
 	user.ID = uuid.NewString()
-	user.Name = strings.TrimSpace(r.FormValue("name"))
+	user.Name = models.Capitalise(strings.TrimSpace(r.FormValue("name")))
 	user.Age = uint(age)
 	user.Email = strings.TrimSpace(r.FormValue("email"))
 	user.Username = strings.TrimSpace(r.FormValue("username"))
 	user.Password = strings.TrimSpace(r.FormValue("password"))
 	user.Specialty = strings.TrimSpace(r.FormValue("specialty"))
-
 	_, err := db.FindDocByEmailandUserName(user.Email, user.Username)
 	if err == nil {
-
 		t, e := template.ParseFiles("pages/doctorRegister.html")
 		if e != nil {
 			fmt.Println(e)
@@ -200,19 +192,19 @@ func PostRegisterDoctorHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(e)
 			return
 		}
-
 	}
-
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	user.PasswordHash = string(hashedPassword)
-
 	db.CreateDocInTable(user)
-
-	http.Redirect(w, r, "/doctorLogin", http.StatusFound)
+	temp, errt := template.ParseFiles("pages/doctorRegister.html")
+	if errt != nil {
+		fmt.Println(errt)
+	}
+	temp.Execute(w, user.Name+" is now a registered Doctor. Login")
 
 }
 
@@ -335,7 +327,7 @@ func ChooseHoursHandler(w http.ResponseWriter, r *http.Request) {
 	noonStart := startInt == 12
 	fmt.Println(closetime)
 	if checkStart {
-		starttime = starttime + ":" + "PM"
+		starttime = starttime + ":" + "00" + "PM"
 	} else if noonStart {
 		starttime = starttime + ":" + "PM"
 	} else if !checkStart {

@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Plus Doctors</title>
-
     <style>
         *{
             box-sizing: border-box;
@@ -13,15 +12,11 @@
         body{
             margin: 0;
             font-family: Georgia, 'Times New Roman', Times, serif;
-
         }
-
         .container {
             width: 85%;
             margin: 0 auto;
         }
-
-
         nav {
             display: flex;
             justify-content: space-between;
@@ -35,13 +30,10 @@
             display: flex;
             list-style-type: none;
             margin: auto 0;
-
             padding: 0;
         }
-
         nav li {
             margin-left: 40px;
-
         }
         nav li a {
             color: rgb(6, 87, 187);
@@ -49,14 +41,47 @@
             text-decoration: none;
             margin-top: 10px;
         }
-
+        h1 {
+            font-family: Courier;
+            color: #2d6fe0;
+            text-align: center;
+        }
         main {
             height: 720px;
             background-color: hsl(191, 37%, 85%);
         }
-
-
-
+        .content-table {
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            min-width: 100%;
+            border-radius: 5px 5px 0 0;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+        .content-table thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+        .content-table th,
+        .content-table td {
+            padding: 12px 15px;
+        }
+        .content-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+        .content-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        .content-table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+        .content-table tbody tr.active-row {
+            font-weight: bold;
+            color: #009879;
+        }
     </style>
 </head>
 <body>
@@ -66,28 +91,37 @@
         <ul>
             <li><a href="/patientDashboard">Dashboard</a></li>
             <li><a href="/patientLogout">Log Out</a></li>
-
         </ul>
     </nav>
 </div>
-
 <main>
     <br>
     <h1>YOUR SCHEDULED APPOINTMENTS ARE</h1>
-    {{range $i, $v:= .}}
     <br>
     <div class="">
-        <h2>{{ .Purpose}}</h2>
-        <p style="font-size: 23px">
-            Dr. {{ .DoctorName}}
-            <br>
-            Time: {{ .AppointmentHour}}
-            <br>
-            <button><a href="cancel/{{ .ID }}">CANCEL</a></button>
-        </p>
+        <table class="content-table">
+            <thead>
+            <tr>
+                <th>S/N</th>
+                <th>Name</th>
+                <th>Purpose</th>
+                <th>Time</th>
+                <th>Cancel</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{range $i, $v:= .}}
+            <tr>
+                <td>{{ $i}}</td>
+                <td>{{ .DoctorName}}</td>
+                <td>{{ .Purpose}}</td>
+                <td>{{ .AppointmentHour}}</td>
+                <td><a href="cancel/{{ .ID }}">CANCEL</a></td>
+            </tr>
+            {{end}}
+            </tbody>
+        </table>
     </div>
-    {{end}}
-
 </main>
 </body>
 </html>
