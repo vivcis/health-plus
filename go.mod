@@ -1,10 +1,9 @@
 module github.com/decadev/squad10/healthplus
 
-go 1.17
+go 1.18
 
 require (
 	github.com/alexedwards/scs/v2 v2.5.0
-	github.com/go-chi/chi v1.5.4
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0

@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Plus</title>
-
+    <title>Appointment Error</title>
     <style>
         *{
             box-sizing: border-box;
@@ -54,36 +53,23 @@
             height: 720px;
             background-color: hsl(191, 37%, 85%);
         }
-       
+        h2{
+            color: red;
+            text-align: center;
+        }
+       h3 a{
+           text-decoration: none;
+           color: rgb(43, 118, 93);
+           display: block;
+           text-align: center;
+       }
 
 
 </style>
 </head>
 <body>
-<div class="container">
-    <nav>
-       <img src="/static/images/tinywow_remove_bg_1868557.png" alt="logo" />
-        <ul>
-            <li><a href="/workinghours">Set Working Hours</a></li>
-            <li><a href="/doctorLogout">Log Out</a></li>
-            
-        </ul>
-    </nav>
-</div>
-
-<main>
+    <h2>BOOKING ERROR : {{.}}</h2>
     <br>
-    <h1>WELCOME Dr. {{ .Name}}</h1>
-    <br><br>
-    <h2>YOUR SPECIALTY: {{ .Specialty}}</h2>
-    <br><br>
-    <h3>OPEN: {{ .StringStart}}</h3>
-    <br><br>
-    <h3>CLOSE: {{ .StringClose}}</h3>
-    <br><br>
-    <h3><a href="/viewdocappointments">YOUR APPOINTMENT SCHEDULES</a></h3>
-
-    
-</main>
+    <h3><a href="/patientDashboard">HOME</a></h3>
 </body>
 </html>
