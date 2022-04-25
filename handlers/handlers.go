@@ -358,7 +358,7 @@ func ChooseHoursHandler(w http.ResponseWriter, r *http.Request) {
 	db.DB.Model(&doc).Update("close_time", closeInt)
 
 	//redirect your page back to the index/home page when done (on a click)
-	http.Redirect(w, r, "/doctorDashboard", 302)
+	http.Redirect(w, r, "/doctorDashboard", http.StatusFound)
 }
 
 func BookByIdHandler(w http.ResponseWriter, r *http.Request) {
@@ -439,10 +439,10 @@ func PostBookByIdHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(appointment.AppointmentHour)
 	valid := db.CheckAppointmentIsValid(appointment.DoctorID, appointment.AppointmentHour)
 	appointment.DoctorName = f.Name
-	appointment.Date = fmt.Sprintf("%s", time.Now())
+	appointment.Date = time.Now().String()
 	appointment.PatientName = patient.Name
 	appointment.PatientID = patient.ID
-	if valid == true {
+	if valid {
 		db.CreateAppointmentInTable(appointment)
 		http.Redirect(w, r, "/patientDashboard", http.StatusFound)
 	} else {
@@ -482,7 +482,7 @@ func DeletePatientAppointmentHandler(w http.ResponseWriter, r *http.Request) {
 	ID := params["ID"]
 	db.DeleteAppointmentbyID(ID)
 	//redirect your page back to the index/home page when done (on a click)
-	http.Redirect(w, r, "/checkappointments", 302)
+	http.Redirect(w, r, "/checkappointments", http.StatusFound)
 }
 
 func CheckDoctorAppointmentHandler(w http.ResponseWriter, r *http.Request) {
@@ -511,5 +511,5 @@ func DeleteDoctorAppointmentHandler(w http.ResponseWriter, r *http.Request) {
 	ID := params["ID"]
 	db.DeleteAppointmentbyID(ID)
 	//redirect your page back to the index/home page when done (on a click)
-	http.Redirect(w, r, "/viewdocappointments", 302)
+	http.Redirect(w, r, "/viewdocappointments", http.StatusFound)
 }
