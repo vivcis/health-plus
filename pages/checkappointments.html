@@ -47,8 +47,9 @@
             text-align: center;
         }
         main {
-            height: 720px;
+            height: 90vh;
             background-color: hsl(191, 37%, 85%);
+            padding-bottom: 50px;
         }
         .content-table {
             border-collapse: collapse;
@@ -111,8 +112,9 @@
             </thead>
             <tbody>
             {{range $i, $v:= .}}
+            
             <tr>
-                <td>{{ $i}}</td>
+                <td>{{ $v.Add $i}}</td>
                 <td>{{ .DoctorName}}</td>
                 <td>{{ .Purpose}}</td>
                 <td>{{ .AppointmentHour}}</td>

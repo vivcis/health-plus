@@ -112,11 +112,11 @@
             <tbody>
             {{range $i, $v:= .}}
             <tr>
-                <td>{{ $i}}</td>
-                <td>{{ .PatientName}}</td>
-                <td>{{ .Purpose}}</td>
-                <td>{{ .AppointmentHour}}</td>
-                <td><a href="canceldoc/{{ .ID }}">CANCEL</a></td>
+                <td>{{ $v.Add $i}}</td>
+                <td>{{ $v.PatientName}}</td>
+                <td>{{ $v.Purpose}}</td>
+                <td>{{ $v.AppointmentHour}}</td>
+                <td><a href="canceldoc/{{ $v.ID }}">CANCEL</a></td>
             </tr>
             {{end}}
             </tbody>

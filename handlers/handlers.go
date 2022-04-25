@@ -2,17 +2,18 @@ package handlers
 
 import (
 	"fmt"
+	"html/template"
+	"net/http"
+	"strconv"
+	"strings"
+	"time"
+
 	"github.com/alexedwards/scs/v2"
 	"github.com/decadev/squad10/healthplus/db"
 	"github.com/decadev/squad10/healthplus/models"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"golang.org/x/crypto/bcrypt"
-	"html/template"
-	"net/http"
-	"strconv"
-	"strings"
-	"time"
 )
 
 var Sessions *scs.SessionManager
@@ -179,7 +180,7 @@ func PostRegisterDoctorHandler(w http.ResponseWriter, r *http.Request) {
 	user.Email = strings.TrimSpace(r.FormValue("email"))
 	user.Username = strings.TrimSpace(r.FormValue("username"))
 	user.Password = strings.TrimSpace(r.FormValue("password"))
-	user.Specialty = strings.TrimSpace(r.FormValue("specialty"))
+	user.Specialty = models.Capitalise(strings.TrimSpace(r.FormValue("specialty")))
 	_, err := db.FindDocByEmailandUserName(user.Email, user.Username)
 	if err == nil {
 		t, e := template.ParseFiles("pages/doctorRegister.html")
@@ -323,24 +324,32 @@ func ChooseHoursHandler(w http.ResponseWriter, r *http.Request) {
 	startInt, _ := strconv.Atoi(starttime)
 	closeInt, _ := strconv.Atoi(closetime)
 
+	if startInt > closeInt {
+		file, err := template.ParseFiles("pages/appointmentTimeError.html")
+		if err != nil {
+			fmt.Println(err)
+		}
+		file.Execute(w, "START TIME LATER THAN END TIME ")
+		return
+	}
 	checkStart := startInt > 12
 	noonStart := startInt == 12
 	fmt.Println(closetime)
 	if checkStart {
-		starttime = starttime + ":" + "00" + "PM"
+		starttime = strconv.Itoa(startInt-12) + ":" + "00" + "PM"
 	} else if noonStart {
-		starttime = starttime + ":" + "PM"
+		starttime = strconv.Itoa(startInt) + ":" + "00" + "PM"
 	} else if !checkStart {
-		starttime = starttime + ":" + "AM"
+		starttime = strconv.Itoa(startInt) + ":" + "00" + "AM"
 	}
 	checkEnd := closeInt > 12
 	noonEnd := closeInt == 12
 	if checkEnd {
-		closetime = closetime + ":" + "PM"
+		closetime = strconv.Itoa(closeInt-12) + ":" + "00" + "PM"
 	} else if noonEnd {
-		closetime = closetime + ":" + "PM"
+		closetime = strconv.Itoa(closeInt) + ":" + "00" + "PM"
 	} else {
-		closetime = closetime + ":" + "AM"
+		closetime = strconv.Itoa(closeInt) + ":" + "00" + "AM"
 	}
 	//Gorm command to update a field
 	db.DB.Model(&doc).Update("string_start", starttime)

@@ -7,8 +7,8 @@ type Doctor struct {
 	Specialty   string `json:"specialty"`
 	StartTime   int    `json:"starttime"`
 	CloseTime   int    `json:"closetime"`
-	StringStart string `json:"stringstart`
-	StringClose string `json:stringclose`
+	StringStart string `json:"stringstart"`
+	StringClose string `json:"stringclose"`
 	Bookings    []Appointment
 }
 
