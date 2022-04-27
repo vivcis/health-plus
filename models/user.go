@@ -1,6 +1,8 @@
 package models
 
-import "strings"
+import (
+	"strings"
+)
 
 type User struct {
 	ID           string `gorm:"primaryKey" json:"id"`

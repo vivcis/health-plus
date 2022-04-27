@@ -73,6 +73,19 @@
             box-shadow: inset 2px 2px 5px #babecc,
             inset -5px -5px 10px #ffffff73;
         }
+        .field select{
+            height: 100%;
+            width: 100%;
+            padding-left: 45px;
+            font-size: 18px;
+            outline: none;
+            border: none;
+            color: #595959;
+            background: #dde1e7;
+            border-radius: 25px;
+            box-shadow: inset 2px 2px 5px #babecc,
+            inset -5px -5px 10px #ffffff73;
+        }
         .field input:focus ~ label{
             box-shadow: inset 2px 2px 5px #babecc,
             inset -1px -1px 2px #ffffff73;
@@ -184,7 +197,15 @@
 
         <div class="field">
             <span class="fa-user-md"></span>
-            <input type="text" id="specialty" name="specialty" placeholder="Specialty" required />
+            <select name="specialty" id="specialty" placeholder="Specialty" required >
+                <option value="None">Choose Specialty </option>
+                <option value="Mental Health">Mental Health</option>
+                <option value="Dentist">Dentist</option>
+                <option value="Gynacologist">Gynacologist</option>
+                <option value="Dermatologist">Dermatologist</option>
+                
+             </select>
+
         </div>
 
         <div class="field">

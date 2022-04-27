@@ -10,3 +10,7 @@ type Appointment struct {
 	DoctorName      string `json:"doctorName"`
 	PatientName     string `json:"patientName"`
 }
+
+func (a Appointment) Add(val int) int {
+	return val + 1
+}
